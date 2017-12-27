@@ -18,6 +18,15 @@
 extern "C" {
 #endif
 
+#ifdef __GNUC__
+#define FAST_FMT(a,b) __attribute__((format(printf, a, b)))
+#define FAST_NORETURN __attribute__((noreturn))
+#else
+#define FAST_FMT(a,b)
+#define FAST_NORETURN
+#endif
+
+
 //log time precision
 #define LOG_TIME_PRECISION_SECOND	's'  //second
 #define LOG_TIME_PRECISION_MSECOND	'm'  //millisecond
@@ -282,7 +291,7 @@ void log_destroy_ex(LogContext *pContext);
  *  return: none
 */
 void log_it_ex(LogContext *pContext, const int priority, \
-		const char *format, ...);
+		const char *format, ...) FAST_FMT(3, 4);
 
 /** log to file
  *  parameters:
@@ -338,16 +347,16 @@ int log_rotate(LogContext *pContext);
 */
 int log_delete_old_files(void *args);
 
-void logEmergEx(LogContext *pContext, const char *format, ...);
-void logCritEx(LogContext *pContext, const char *format, ...);
-void logAlertEx(LogContext *pContext, const char *format, ...);
-void logErrorEx(LogContext *pContext, const char *format, ...);
-void logWarningEx(LogContext *pContext, const char *format, ...);
-void logNoticeEx(LogContext *pContext, const char *format, ...);
-void logInfoEx(LogContext *pContext, const char *format, ...);
-void logDebugEx(LogContext *pContext, const char *format, ...);
+void logEmergEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logCritEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logAlertEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logErrorEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logWarningEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logNoticeEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logInfoEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
+void logDebugEx(LogContext *pContext, const char *format, ...) FAST_FMT(2, 3);
 void logAccess(LogContext *pContext, struct timeval *tvStart, \
-		const char *format, ...);
+		const char *format, ...) FAST_FMT(3, 4);
 
 //#define LOG_FORMAT_CHECK
 
@@ -365,14 +374,14 @@ void logAccess(LogContext *pContext, struct timeval *tvStart, \
 #else
 
 /* following functions use global log context: g_log_context */
-void logEmerg(const char *format, ...);
-void logCrit(const char *format, ...);
-void logAlert(const char *format, ...);
-void logError(const char *format, ...);
-void logWarning(const char *format, ...);
-void logNotice(const char *format, ...);
-void logInfo(const char *format, ...);
-void logDebug(const char *format, ...);
+void logEmerg(const char *format, ...) FAST_FMT(1, 2);
+void logCrit(const char *format, ...) FAST_FMT(1, 2);
+void logAlert(const char *format, ...) FAST_FMT(1, 2);
+void logError(const char *format, ...) FAST_FMT(1, 2);
+void logWarning(const char *format, ...) FAST_FMT(1, 2);
+void logNotice(const char *format, ...) FAST_FMT(1, 2);
+void logInfo(const char *format, ...) FAST_FMT(1, 2);
+void logDebug(const char *format, ...) FAST_FMT(1, 2);
 
 #endif
 

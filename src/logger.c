@@ -845,7 +845,7 @@ static int log_check_rotate(LogContext *pContext)
 		}
 		return ENOENT;
 	}
-	
+
 	if (pContext->rotate_immediately)
 	{
 		pContext->rotate_immediately = false;
@@ -1003,9 +1003,14 @@ static void doLogEx(LogContext *pContext, struct timeval *tv, \
         pContext->pcurrent_buff += buff_len;
     }
 
+    buff_len = sprintf(pContext->pcurrent_buff, \
+            "[0x%lx] ", pthread_self());
+
+    pContext->pcurrent_buff += buff_len;
+
 	if (caption != NULL)
 	{
-		buff_len = sprintf(pContext->pcurrent_buff, "%s - ", caption);
+		buff_len = sprintf(pContext->pcurrent_buff, "%s ", caption);
 		pContext->pcurrent_buff += buff_len;
 	}
 	memcpy(pContext->pcurrent_buff, text, text_len);
