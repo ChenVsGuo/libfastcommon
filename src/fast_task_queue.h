@@ -49,6 +49,7 @@ struct fast_task_info
 {
 	IOEventEntry event;  //must first
 	char client_ip[IP_ADDRESS_SIZE];
+	uint16_t client_port;
 	void *arg;  //extra argument pointer
 	char *data; //buffer for write or recv
 	int size;   //alloc size

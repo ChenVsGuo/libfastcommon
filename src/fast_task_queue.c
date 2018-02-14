@@ -483,6 +483,7 @@ int free_queue_push(struct fast_task_info *pTask)
 	int result;
 
 	*(pTask->client_ip) = '\0';
+    pTask->client_port = 0;
 	pTask->length = 0;
 	pTask->offset = 0;
 	pTask->req_count = 0;
