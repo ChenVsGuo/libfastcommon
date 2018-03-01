@@ -48,10 +48,10 @@ struct nio_thread_data
 struct fast_task_info
 {
 	IOEventEntry event;  //must first
-	char client_ip[IP_ADDRESS_SIZE];
-	uint16_t client_port;
 	void *arg;  //extra argument pointer
 	char *data; //buffer for write or recv
+	char client_ip[IP_ADDRESS_SIZE];
+	uint16_t client_port;
 	int size;   //alloc size
 	int length; //data length
 	int offset; //current offset
