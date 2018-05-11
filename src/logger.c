@@ -25,10 +25,6 @@
 #include "sched_thread.h"
 #include "logger.h"
 
-#ifndef LINE_MAX
-#define LINE_MAX 2048
-#endif
-
 #define LOG_BUFF_SIZE    64 * 1024
 
 #define NEED_COMPRESS_LOG(flags) ((flags & LOG_COMPRESS_FLAGS_ENABLED) != 0)

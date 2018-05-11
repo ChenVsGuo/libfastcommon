@@ -18,6 +18,10 @@
 extern "C" {
 #endif
 
+#ifndef LINE_MAX
+#define LINE_MAX 2048
+#endif
+
 #ifdef __GNUC__
 #define FAST_FMT(a,b) __attribute__((format(printf, a, b)))
 #define FAST_NORETURN __attribute__((noreturn))
