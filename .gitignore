@@ -1,0 +1,6 @@
+*.o
+*.lo
+*.a
+*.so
+Makefile
+_os_define.h

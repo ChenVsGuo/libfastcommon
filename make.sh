@@ -53,10 +53,13 @@ fi
 DEBUG_FLAG=0
 
 CFLAGS='-Wall -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE'
+CXXFLAGS='-Wall -std=c++11 -D_GNU_SOURCE'
 if [ "$DEBUG_FLAG" = "1" ]; then
   CFLAGS="$CFLAGS -g -DDEBUG_FLAG"
+  CXXFLAGS="$CXXFLAGS -g -DDEBUG_FLAG"
 else
   CFLAGS="$CFLAGS -g -O3"
+  CXXFLAGS="$CXXFLAGS -g -O3"
 fi
 
 LIBS='-lm'
@@ -72,6 +75,7 @@ elif [ "$uname" = "FreeBSD" ] || [ "$uname" = "Darwin" ]; then
   IOEVENT_USE=IOEVENT_USE_KQUEUE
   if [ "$uname" = "Darwin" ]; then
     CFLAGS="$CFLAGS -DDARWIN"
+    CXXFLAGS="$CXXFLAGS -DDARWIN"
   fi
 
   if [ -f /usr/include/sys/vmmeter.h ]; then
@@ -85,13 +89,17 @@ elif [ "$uname" = "SunOS" ]; then
   OS_NAME=OS_SUNOS
   IOEVENT_USE=IOEVENT_USE_PORT
   CFLAGS="$CFLAGS -D_THREAD_SAFE"
+  CXXFLAGS="$CXXFLAGS -D_THREAD_SAFE"
   LIBS="$LIBS -lsocket -lnsl -lresolv"
   export CC=gcc
+  export CXX=g++
 elif [ "$uname" = "AIX" ]; then
   OS_NAME=OS_AIX
   IOEVENT_USE=IOEVENT_USE_NONE
   CFLAGS="$CFLAGS -D_THREAD_SAFE"
+  CXXFLAGS="$CXXFLAGS -D_THREAD_SAFE"
   export CC=gcc
+  export CXX=g++
 elif [ "$uname" = "HP-UX" ]; then
   OS_NAME=OS_HPUX
   IOEVENT_USE=IOEVENT_USE_NONE
@@ -148,6 +156,7 @@ sed_replace()
 cd src
 cp Makefile.in Makefile
 sed_replace "s/\\\$(CFLAGS)/$CFLAGS/g" Makefile
+sed_replace "s/\\\$(CXXFLAGS)/$CXXFLAGS/g" Makefile
 sed_replace "s/\\\$(LIBS)/$LIBS/g" Makefile
 sed_replace "s/\\\$(LIB_VERSION)/$LIB_VERSION/g" Makefile
 make $1 $2 $3
