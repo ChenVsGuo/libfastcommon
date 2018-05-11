@@ -282,6 +282,14 @@ void log_set_fd_flags(LogContext *pContext, const int flags);
 */
 void log_destroy_ex(LogContext *pContext);
 
+/** log raw content
+ * parameters:
+ * 
+ *
+ */
+void log_raw(LogContext *pContext, const char *text, const int text_len, \
+               const bool bNeedSync, const bool bNeedLock);
+
 /** log to file
  *  parameters:
  *           pContext: the log context
@@ -384,6 +392,29 @@ void logInfo(const char *format, ...) FAST_FMT(1, 2);
 void logDebug(const char *format, ...) FAST_FMT(1, 2);
 
 #endif
+
+#define DO_LOG(pContext, priority, caption, bNeedSync) \
+    char text[LINE_MAX]; \
+    unsigned int len; \
+    \
+    if (pContext->log_level < priority) \
+{ \
+    return; \
+} \
+\
+{ \
+    va_list ap; \
+    va_start(ap, format); \
+    len = vsnprintf(text, sizeof(text), format, ap);  \
+    va_end(ap); \
+    if (len >= sizeof(text)) \
+    { \
+        len = sizeof(text) - 1; \
+    } \
+} \
+\
+log_it_ex2(pContext, caption, text, len, bNeedSync, true);
+
 
 #ifdef __cplusplus
 }

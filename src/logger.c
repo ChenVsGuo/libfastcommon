@@ -931,6 +931,50 @@ static int log_fsync(LogContext *pContext, const bool bNeedLock)
 	return result;
 }
 
+void log_raw(LogContext *pContext, const char *text, const int text_len, \
+               const bool bNeedSync, const bool bNeedLock)
+{
+    int result = -1;
+	if (text_len > LOG_BUFF_SIZE)
+	{
+		fprintf(stderr, "file: "__FILE__", line: %d, " \
+			"log buff size: %d < log text length: %d ", \
+			__LINE__, LOG_BUFF_SIZE, text_len + 64);
+		return;
+	}
+
+	if (bNeedLock && (result=pthread_mutex_lock(&pContext->log_thread_lock)) != 0)
+	{
+		fprintf(stderr, "file: "__FILE__", line: %d, " \
+			"call pthread_mutex_lock fail, " \
+			"errno: %d, error info: %s", \
+			__LINE__, result, STRERROR(result));
+	}
+
+
+	if ((pContext->pcurrent_buff - pContext->log_buff) + text_len \
+			> LOG_BUFF_SIZE)
+	{
+		log_fsync(pContext, false);
+	}
+
+	memcpy(pContext->pcurrent_buff, text, text_len);
+	pContext->pcurrent_buff += text_len;
+	*pContext->pcurrent_buff++ = '\n';
+
+	if (!pContext->log_to_cache || bNeedSync)
+	{
+		log_fsync(pContext, false);
+	}
+
+	if (bNeedLock && (result=pthread_mutex_unlock(&(pContext->log_thread_lock))) != 0)
+	{
+		fprintf(stderr, "file: "__FILE__", line: %d, " \
+			"call pthread_mutex_unlock fail, " \
+			"errno: %d, error info: %s", \
+			__LINE__, result, STRERROR(result));
+	}
+}
 static void doLogEx(LogContext *pContext, struct timeval *tv, \
 		const char *caption, const char *text, const int text_len, \
 		const bool bNeedSync, const bool bNeedLock)
