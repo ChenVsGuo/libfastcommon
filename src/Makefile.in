@@ -37,7 +37,7 @@ HEADER_FILES = common_define.h hash.h chain.h logger.h base64.h \
 			   char_convert_loader.h \
 			   blockingconcurrentqueue.h \
 			   concurrentqueue.h \
-			   lk_queue.h
+			   lk_queue.h list.h
 
 ALL_OBJS = $(FAST_STATIC_OBJS) $(FAST_SHARED_OBJS)
 
