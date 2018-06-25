@@ -129,25 +129,31 @@ static inline int list_is_last(const struct list_head *list,
     return list->next == head;
 }
 
-#define list_entry(ptr, type, member)					\
+#define list_entry(ptr, type, member)                           \
 	((type *)((char *)(ptr)-(unsigned long)(&((type *)0)->member)))
 
 
-#define list_for_each(pos, head)				     \
+#define list_for_each(pos, head)                                \
 	for (pos = (head)->next; pos != (head); pos = pos->next)
 
 
-#define list_for_each_entry(pos, head, member)				\
-	for (pos = list_entry((head)->next, typeof(*pos), member);	\
-	     &pos->member != (head); 					\
+#define list_for_each_entry(pos, head, member)                  \
+	for (pos = list_entry((head)->next, typeof(*pos), member);  \
+	     &pos->member != (head);                                \
 	     pos = list_entry(pos->member.next, typeof(*pos), member))
 
 
-#define list_for_each_entry_safe(pos, n, head, member)			\
-	for (pos = list_entry((head)->next, typeof(*pos), member),	\
-		n = list_entry(pos->member.next, typeof(*pos), member);	\
-	     &pos->member != (head); 					\
+#define list_for_each_entry_safe(pos, n, head, member)          \
+	for (pos = list_entry((head)->next, typeof(*pos), member),  \
+		n = list_entry(pos->member.next, typeof(*pos), member); \
+	     &pos->member != (head);                                \
 	     pos = n, n = list_entry(n->member.next, typeof(*n), member))
+
+#define list_for_each_entry_safe_tail(pos, n, head, member)     \
+	for (pos = list_entry((head)->prev, typeof(*pos), member),  \
+		n = list_entry(pos->member.prev, typeof(*pos), member); \
+	     &pos->member != (head);                                \
+	     pos = n, n = list_entry(n->member.prev, typeof(*n), member))
 
 #define list_for_each_prev(pos, head) \
     for (pos = (head)->prev; pos != (head); pos = pos->prev)
