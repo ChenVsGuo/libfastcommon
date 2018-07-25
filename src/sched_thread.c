@@ -308,8 +308,11 @@ static void *sched_thread_entrance(void *args)
 	int i;
 
 	pContext = (ScheduleContext *)args;
-	if (sched_init_entries(&(pContext->scheduleArray)) != 0)
-	{
+	if (sched_init_entries(&(pContext->scheduleArray)) != 0) {
+        if (pContext->scheduleArray.entries != NULL) {
+            free(pContext->scheduleArray.entries);
+            pContext->scheduleArray.entries = NULL;
+        }
 		free(pContext);
 		return NULL;
 	}
@@ -444,6 +447,10 @@ static void *sched_thread_entrance(void *args)
 	logDebug("file: "__FILE__", line: %d, " \
 		"schedule thread exit", __LINE__);
 
+    if (pContext->scheduleArray.entries != NULL) {
+        free(pContext->scheduleArray.entries);
+        pContext->scheduleArray.entries = NULL;
+    }
 	free(pContext);
 	return NULL;
 }
@@ -596,13 +603,6 @@ int sched_start_ex(ScheduleArray *pScheduleArray, pthread_t *ptid,
 		return result;
 	}
 
-	if ((result=sched_dup_array(pScheduleArray, \
-			&(pContext->scheduleArray))) != 0)
-	{
-		free(pContext);
-		return result;
-	}
-
     if (timer_slot_count > 0)
     {
         if ((result=fast_mblock_init(&pContext->mblock,
@@ -625,6 +625,13 @@ int sched_start_ex(ScheduleArray *pScheduleArray, pthread_t *ptid,
 		    return result;
         }
         pContext->timer_init = true;
+    }
+
+    if ((result=sched_dup_array(pScheduleArray, \
+                    &(pContext->scheduleArray))) != 0)
+    {
+        free(pContext);
+        return result;
     }
 
 	pContext->pcontinue_flag = pcontinue_flag;
