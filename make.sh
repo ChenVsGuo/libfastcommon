@@ -63,6 +63,14 @@ else
 fi
 
 LIBS='-lm'
+
+ENABLE_TBB=1
+
+if [ "$ENABLE_TBB" = "1" ]; then
+  CXXFLAGS="$CXXFLAGS -DTBB"
+  LIBS="$LIBS -ltbb"
+fi
+
 uname=`uname`
 
 HAVE_VMMETER_H=0
