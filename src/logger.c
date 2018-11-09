@@ -20,6 +20,7 @@
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <pthread.h>
+#include <sys/syscall.h>
 #include "shared_func.h"
 #include "pthread_func.h"
 #include "sched_thread.h"
@@ -971,6 +972,12 @@ void log_raw(LogContext *pContext, const char *text, const int text_len, \
 			__LINE__, result, STRERROR(result));
 	}
 }
+
+static pid_t gettid(void)
+{
+	return syscall(__NR_gettid);
+}
+
 static void doLogEx(LogContext *pContext, struct timeval *tv, \
 		const char *caption, const char *text, const int text_len, \
 		const bool bNeedSync, const bool bNeedLock)
@@ -1044,7 +1051,7 @@ static void doLogEx(LogContext *pContext, struct timeval *tv, \
     }
 
     buff_len = sprintf(pContext->pcurrent_buff, \
-            "[0x%lx] ", pthread_self());
+            "[%d] ", gettid());
 
     pContext->pcurrent_buff += buff_len;
 
