@@ -99,7 +99,7 @@ int log_init_ex(LogContext *pContext)
 	}
 	pContext->pcurrent_buff = pContext->log_buff;
 
-	if ((result=init_pthread_lock(&(pContext->log_thread_lock))) != 0)
+	if ((result=pthread_mutex_init(&pContext->log_thread_lock, NULL)) != 0)
 	{
 		return result;
 	}

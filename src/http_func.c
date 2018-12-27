@@ -227,6 +227,7 @@ int get_url_content_ex(const char *url, const int url_len,
         }
 
         *(*content + *content_len) = '\0';
+        //fprintf(stderr, "content: %.*s\n", *content_len, *content);
         pContent = strstr(*content, "\r\n\r\n");
         if (pContent == NULL)
         {
