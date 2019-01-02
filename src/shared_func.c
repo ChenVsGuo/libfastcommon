@@ -24,6 +24,7 @@
 #include <grp.h>
 #include <pwd.h>
 #include <math.h>
+#include <sys/syscall.h>
 
 #include "shared_func.h"
 #include "logger.h"
@@ -2559,4 +2560,9 @@ key_t fc_ftok(const char *path, const int proj_id)
     int hash_code;
     hash_code = simple_hash(path, strlen(path));
     return (((proj_id & 0xFF) << 24) | (hash_code & 0xFFFFFF));
+}
+
+pid_t gettid(void)
+{
+	return syscall(__NR_gettid);
 }

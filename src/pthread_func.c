@@ -26,10 +26,8 @@
 
 int init_pthread_lock(pthread_mutex_t *pthread_lock)
 {
-	//pthread_mutexattr_t mat;
-	//int result;
-	return pthread_mutex_init(pthread_lock, NULL);
-    /*
+	pthread_mutexattr_t mat;
+	int result;
     if ((result=pthread_mutexattr_init(&mat)) != 0)
 	{
 		logError("file: "__FILE__", line: %d, " \
@@ -65,7 +63,6 @@ int init_pthread_lock(pthread_mutex_t *pthread_lock)
 	}
 
 	return 0;
-    */
 }
 
 int init_pthread_attr(pthread_attr_t *pattr, const int stack_size)

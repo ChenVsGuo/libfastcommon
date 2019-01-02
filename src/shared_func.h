@@ -670,7 +670,12 @@ ssize_t fc_safe_read(int fd, char *buf, const size_t count);
  *  return: read bytes for success, -1 when fail
 */
 key_t fc_ftok(const char *path, const int proj_id);
-
+/**
+ * get thread id
+ *
+ *
+ */
+pid_t gettid(void);
 #ifdef __cplusplus
 }
 #endif

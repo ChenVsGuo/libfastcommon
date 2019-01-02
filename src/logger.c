@@ -973,11 +973,6 @@ void log_raw(LogContext *pContext, const char *text, const int text_len, \
 	}
 }
 
-static pid_t gettid(void)
-{
-	return syscall(__NR_gettid);
-}
-
 static void doLogEx(LogContext *pContext, struct timeval *tv, \
 		const char *caption, const char *text, const int text_len, \
 		const bool bNeedSync, const bool bNeedLock)
