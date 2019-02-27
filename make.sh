@@ -64,7 +64,7 @@ fi
 
 LIBS='-lm'
 
-ENABLE_TBB=1
+ENABLE_TBB=0
 
 if [ "$ENABLE_TBB" = "1" ]; then
   CXXFLAGS="$CXXFLAGS -DTBB"
